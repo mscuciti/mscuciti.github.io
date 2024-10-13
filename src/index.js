@@ -2,11 +2,16 @@
 (function() {
   var canvas, ct, ctx, get, h, hsl, i, imageData, isPrime, j, m, neighbor, nums, o, p, pf, primeFactors, putData, q, r, ref, ref1, ref2, ref3, w, xy;
 
-  canvas = document.getElementById('canvas');
+canvas = document.getElementById('canvas');
 
-  ctx = canvas.getContext('2d');
+var iterations = 200;
 
-  imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+canvas.width  = 200;
+canvas.height = 200;
+
+ctx = canvas.getContext('2d');
+
+imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
   neighbor = function(n, dir, w, h) {
     switch (dir) {
@@ -54,6 +59,8 @@
   };
 
   // filter array k for f
+	// handy for if you have a list of factors
+	// and want to pull out specific ones
   get = function(k, f) {
     var fnc;
     return k.filter(fnc = function(a) {
@@ -84,8 +91,8 @@
       for h of globalPrimes
         if globalPrimes[h]>0 then break
     */
-    f2 = get(k, 2).length < 6;
-    rgb = hsl(50, 50, 50 * f2);
+    //f2 = get(k, 2).length < 2;
+    rgb = hsl(10*k.length, 50, 50);
     imageData.data[xy * 4] = rgb[0];
     imageData.data[xy * 4 + 1] = rgb[1];
     imageData.data[xy * 4 + 2] = rgb[2];
@@ -93,6 +100,7 @@
   };
 
   nums = canvas.width * canvas.height;
+
 
   // allPrimes = primeFactorsTo(nums)
   /*
@@ -103,15 +111,15 @@
     console.log globalPrimes[h]
     if globalPrimes[h]>10 then break
   */
-  w = canvas.width;
 
+  w = canvas.width;
   h = canvas.height;
 
   xy = w * h / 2 + w / 2; // start at mid
 
   ct = 0;
 
-  for (j = m = 1; m <= 200; j = m += 2) {
+  for (j = m = 1; m <= 100; j = m += 2) {
     for (i = o = 1, ref = j; (1 <= ref ? o <= ref : o >= ref); i = 1 <= ref ? ++o : --o) {
       ct++;
       xy = neighbor(xy, 'R', w, h);
