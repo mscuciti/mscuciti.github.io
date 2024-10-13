@@ -4,10 +4,10 @@
 
 canvas = document.getElementById('canvas');
 
-var iterations = 200;
+var iterations = 200; // num of loops
 
-canvas.width  = 200;
-canvas.height = 200;
+canvas.width  = iterations
+canvas.height = iterations
 
 ctx = canvas.getContext('2d');
 
@@ -92,7 +92,7 @@ imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         if globalPrimes[h]>0 then break
     */
     //f2 = get(k, 2).length < 2;
-    rgb = hsl(10*k.length, 50, 50);
+    rgb = hsl(0, 50, 50*(k.length==2));
     imageData.data[xy * 4] = rgb[0];
     imageData.data[xy * 4 + 1] = rgb[1];
     imageData.data[xy * 4 + 2] = rgb[2];
@@ -119,7 +119,7 @@ imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
   ct = 0;
 
-  for (j = m = 1; m <= 100; j = m += 2) {
+  for (j = m = 1; m <= iterations; j = m += 2) {
     for (i = o = 1, ref = j; (1 <= ref ? o <= ref : o >= ref); i = 1 <= ref ? ++o : --o) {
       ct++;
       xy = neighbor(xy, 'R', w, h);
