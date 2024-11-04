@@ -92,7 +92,7 @@ imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         if globalPrimes[h]>0 then break
     */
     //f2 = get(k, 2).length < 2;
-    rgb = hsl(0, 50, 50*(k.length==2));
+    rgb = hsl(0, 0, 10*(k.length)); // this is the line to play with
     imageData.data[xy * 4] = rgb[0];
     imageData.data[xy * 4 + 1] = rgb[1];
     imageData.data[xy * 4 + 2] = rgb[2];
