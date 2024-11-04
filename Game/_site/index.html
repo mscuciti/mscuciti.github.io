@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>DOM SPRITES</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: black;
+        overflow: hidden;
+      }
+      div {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        font-family: arial;
+        font-size: 12px;
+        color: white;
+        text-align: center;
+      }
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+        > #header {
+        width: 100%;
+        top: 24px;
+        left: 24px;
+      }
+      #header a {
+        color: white;
+      }
+      #stats {
+        width: 100%;
+        bottom: 24px;
+        left: 0px;
+      }
+      #viewport {
+        width: 480px;
+        height: 480px;
+        overflow: hidden;
+        top: 50%;
+        left: 50%;
+        margin-left: -320px;
+        margin-top: -240px;
+      }
+      #level {
+        width: 2048px;
+        height: 512px;
+        top: 0px;
+        left: 0px;
+      }
+      #background {
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+        background: url(img/bgtile.jpg);
+        background-size: 50% 100%;
+      }
+      #tiles {
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+      }
+      .sprite {
+        image-rendering: pixelated;
+        transform: scale(9);
+      }
+      .spriteSheet_1 {
+        background-image: url(img/spritesheet.png);
+      }
+      .spriteSheet_2 {
+        background-image: url(img/spritesheet2.png);
+      }
+      .tileSheet {
+        background-image: url(img/tiles.png);
+      }
+      .nums {
+        background-image: url(img/nums.png);
+      }
+      .smw_mario_sheet {
+        background-image: url(img/smw_mario_sheet.png);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="viewport">
+      <div id="level">
+        <div id="background"></div>
+        <div id="tiles"></div>
+      </div>
+    </div>
+    <div id="stats"></div>
+    <div
+      id="spriteSheet_1"
+      class="spriteSheet_1"
+      style="width: 0; height: 0;"
+    ></div>
+    <div
+      id="smw_mario_sheet"
+      class="smw_mario_sheet"
+      style="width: 0; height: 0;"
+    ></div>
+    <div
+      id="spriteSheet_2"
+      class="spriteSheet_2"
+      style="width: 0; height: 0;"
+    ></div>
+    <div id="tileSheet" class="tileSheet" style="width: 0; height: 0;"></div>
+    <script src="src/00_initialize.js"></script>
+    <script src="src/01_mix/check.js"></script>
+    <script src="src/01_mix/key.js"></script>
+    <script src="src/01_mix/move.js"></script>
+    <script src="src/01_mix/sprite.js"></script>
+    <script src="src/01_mix/timer.js"></script>
+    <script src="src/01_mix/step.js"></script>
+    <script src="src/02_prototypes.js"></script>
+    <script src="src/03_sheet_data.js"></script>
+    <script src="src/04_functions.js"></script>
+    <script src="src/05_objects.js"></script>
+    <script src="src/06_inherit.js"></script>
+    <script src="src/07_input.js"></script>
+    <script src="src/08_room.js"></script>
+    <script src="src/09_game_loop.js"></script>
+    <script src="src/10_animation_loop.js"></script>
+  </body>
+</html>
+
