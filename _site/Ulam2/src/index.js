@@ -99,7 +99,10 @@ function properDivisors(n){
 	var f2, rgb;
 	const sumOfProperDivisors = properDivisors(j).reduce((partialSum, a) => partialSum + a, 0);
 	// these are the lines to play with
-	rgb = hsl(75, 100, primeFactors(j).length*10); 
+	if (sumOfProperDivisors<=j)
+		rgb = hsl(0, (j-sumOfProperDivisors)*1/50, 50); 
+	else if (sumOfProperDivisors>j)
+		rgb = hsl(75, (sumOfProperDivisors-j)*1/50, 50); 
 	imageData.data[xy * 4] = rgb[0];
 	imageData.data[xy * 4 + 1] = rgb[1];
 	imageData.data[xy * 4 + 2] = rgb[2];

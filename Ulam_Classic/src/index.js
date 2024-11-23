@@ -97,9 +97,8 @@ function properDivisors(n){
 
   putData = function(xy, j) {
 	var f2, rgb;
-	const sumOfProperDivisors = properDivisors(j).reduce((partialSum, a) => partialSum + a, 0);
 	// these are the lines to play with
-	rgb = hsl(75, 100, primeFactors(j).length*10); 
+	rgb = hsl(0,0,(primeFactors(j).length==1)*255);
 	imageData.data[xy * 4] = rgb[0];
 	imageData.data[xy * 4 + 1] = rgb[1];
 	imageData.data[xy * 4 + 2] = rgb[2];
