@@ -1,0 +1,187 @@
+<h1 id="structures">Structures</h1>
+
+<p>I am a licensed Civil Engineer in U.S.A. Nothing on this or subsequent pages should be construed as professional practice.</p>
+
+<p>This content is for education and informational purposes only, and no warantee of its accuracy is implied by this publication.</p>
+
+<h2 id="the-beam-equation">The Beam Equation</h2>
+
+<p>I have been interested in the beam equation: <code class="language-plaintext highlighter-rouge">Deflection (x) = d^2 / dx^2 (Stiffness)^-1 d^2 / dx^2 Load (x)</code> [Eq 1]</p>
+
+<p>Which is really more properly:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Deflection (x)
+= d/dx Slope (x)
+= (Stiffness)^-1 d/dx Moment (x)
+= d/dx Shear (x)
+= d/dx Load (x) [Eq 2]
+</code></pre></div></div>
+
+<p>Which is sometimes called the integration method.</p>
+
+<p>This formulation appeals to me for a couple of reasons:</p>
+
+<p>We have a tendency in university to do all sorts of techniques to reduce the degree of indeterminancy (Virtual Work, Superposition, Etc.)<br />
+These are all fine as it goes, however: in practice i have found it is sometimes desirable to have a very simple direct method.</p>
+
+<p>Some advantages:</p>
+<ul>
+  <li>The method is the same every time</li>
+  <li>The method is accessible to hand calcs (simply have a computer provide the solution to the linear system, OR use cramers rule)</li>
+</ul>
+
+<p>Some disadvantages:</p>
+<ul>
+  <li>While i can verify if the method was performed correctly, errors in the way the mothod is set up aren’t easily found
+    <ul>
+      <li>I usually verify one iteration of this with a structural analysis program anyway, and there’s usually one or two mistakes.</li>
+    </ul>
+  </li>
+  <li>This method is not something your coworkers will probably want to learn, so it’s a solo if you decide to use it.</li>
+</ul>
+
+<p>In other words, rather than just saying “analysis is the machine’s job”. 
+We can set up our variables by hand and let the computer handle the very last step.
+Then, we can quickly verify the results, which i like to do 
+(even though the solution of a linear system via lsolve has never been wrong, as far as i can tell).</p>
+
+<p>So far, so elementary. What i’d like to share is my particular organization of this method, and how i like to apply it.</p>
+
+<h2 id="external-equilibrium">External Equilibrium</h2>
+
+<p>Equilibrium has a couple of definitions in structural theory. I’d like to describe the following phenomenon:</p>
+
+<p><strong>The state of a structure such that it has forces acting on it, which are balanced by reaction forces, such that the structure does not accellerate in aggregate</strong></p>
+
+<p>Not the most rigorous definition, but it’ll do. Let’s try making it a little more specific:</p>
+
+<p><code class="language-plaintext highlighter-rouge">Sum (Load Effects + Integration Constant Effects + Reaction Force Effects) = Statical Bounds</code> [Eq 3]</p>
+
+<p>Those familiar with the technique of the integration method will recognize some terms here.</p>
+<ul>
+  <li>Statical Bounds are those conditions which are inherent to how the structure is described.
+    <ul>
+      <li>For example: a support has deflection = 0.</li>
+    </ul>
+  </li>
+  <li>Integration constants allow for initial conditions of the beam equation to be defined.
+    <ul>
+      <li>Looking at Eq 2 up there, it’s easy to see why this term is necessary</li>
+      <li>Albeit, only for M(x), s(x), and D(x).</li>
+    </ul>
+  </li>
+  <li>Loading and support effects probably won’t suprise you, but perhaps the term “effect” does.</li>
+  <li>Here, i am choosing to define “effect” as meaning any of the terms in Eq 2 besides stiffness.</li>
+  <li>Which is to say: the shear effect, moment effect, slope effect and deflection effect.</li>
+  <li>I am NOT using it in the way say, LRFD might use it, which is a pretty broad application of the term where it could mean things like strain, etc.</li>
+</ul>
+
+<p>Crucial to our understanding of how to solve Eq 3 (generally for Reaction force effects) 
+we will have to recognize that each of these terms is the product of a constant and a polynomial of x.
+I have <strong>bolded</strong> the unknowns in Eq 4 below.
+Also, I like to think of the Integration Constant as another kind of bound. One which we solve for. So, call it “Initial Bound” from now on.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>**Reaction Effect Coeff** * Reaction Effect Poly
++ **Init Bound Coeff** * Init Bound Poly
+=
+Statical Bound Coeff * Statical Bound Poly
+- Load Effect Coeff * Load Effect Poly
+</code></pre></div></div>
+
+<p>[Eq 4]</p>
+
+<p>We’re getting somewhere. So, what is this polynomial term?</p>
+
+<h2 id="singularity-functions">Singularity Functions</h2>
+
+<p>When i was at university, i became intrigued by these little functions. Later, i became intrigued by their (part) creator: Oliver Heaviside.
+Look him up when you get a chance, he’s an interesting guy.</p>
+
+<p>In this work, they are half of every term in the beam equation. Representing how loads, reactions and initial conditions propogate along a euler beam.</p>
+
+<p>usually of the form:</p>
+
+<p><code class="language-plaintext highlighter-rouge">&lt;x - a&gt;^n</code></p>
+
+<p>I like to write them in the form:</p>
+
+<p><code class="language-plaintext highlighter-rouge">S_a^n</code></p>
+
+<p>Which is the form they will take throughout the rest of this essay. You can write them however you wish.</p>
+
+<p>These are for a unit load / shear force / moment couple / etc. They are most useful when paired with a constant term:</p>
+
+<p><code class="language-plaintext highlighter-rouge">C_i * S_a^n</code></p>
+
+<p>Which is our “Coeff” and “Poly” above.</p>
+
+<h2 id="matrix-representation">Matrix Representation</h2>
+
+<p>I find linear combinations are easier to understand in their matrix form. So, for example, in Eq 4, we can write the Load Effect:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ Load 1 (kip)  Load 2 (kip)  Load 3 (klf)]     v---------- Boundary Condition under consideration (typ)
+__________________________________________
+| S_B^1         S_D^1         S_E^2       | &lt;== Moment Effect
+| S_B^1         S_D^1         S_E^2       | &lt;== Moment Effect
+| S_B^3         S_D^3         S_E^4       | &lt;== Deflection Effect
+</code></pre></div></div>
+
+<p>Here, to avoid always having to change the exponent for distributed loads, I like to define a “patch” load function.</p>
+
+<p><code class="language-plaintext highlighter-rouge">w_(a,b)^n = S_a^(n+1) - S_b^(n+1)</code> [Eq 5]</p>
+
+<p>So the above becomes:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ Load 1 (kip)  Load 2 (kip)  Load 3 (klf)]
+  @ B           @ D           @ E to F
+__________________________________________
+| S_B^1         S_D^1         w_(E,F)^1   | &lt;== Moment Effect
+| S_B^1         S_D^1         w_(E,F)^1   | &lt;== Moment Effect
+| S_B^3         S_D^3         w_(E,F)^3   | &lt;== Deflection Effect
+</code></pre></div></div>
+
+<p>We can similarly define the other terms in Eq 4.</p>
+
+<h3 id="init-bound">Init Bound:</h3>
+
+<p>initial bound is a bit tricky, because we do not have these constants in some of our equations.</p>
+
+<p>For instance, it doesn’t really make sense to talk about the “slope constant” when considering moment effect.</p>
+
+<p>To deal with such cases, we include a test in the poly matrix.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ M0             θEI0               ΔEI0               ]
+________________________________________________________
+| (0&gt;=0)*S_0^0   (0&gt;=1)*S_0^(-1)    (0&gt;=2)*S_0^(-2)    | &lt;== Moment Effect
+| (0&gt;=0)*S_0^0   (0&gt;=1)*S_0^(-1)    (0&gt;=2)*S_0^(-2)    | &lt;== Moment Effect
+| (2&gt;=0)*S_0^2   (2&gt;=1)*S_0^1       (2&gt;=2)*S_0^0       | &lt;== Deflection Effect
+</code></pre></div></div>
+
+<p>Don’t worry if these are known to be zero. It’s fine to keep them as unknowns, and just solve with extra equations. Unless you’re doing this by hand. 
+If that’s the case, you can feel free to get rid of them to reduce the number of equations (and reduce the size of the determinants).</p>
+
+<h3 id="reactions">Reactions:</h3>
+
+<p>Nothing special here, reactions are treated the same as loads (because… they are the same).</p>
+
+<p>The only difference is that while the poly matrix is known, the constants are not (in fact, this is largely what we’re solving for).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ R_A          R_C            R_C         ]
+__________________________________________
+| S_A^1        S_C^1          S_C^1       | &lt;== Moment Effect
+| S_A^1        S_C^1          S_C^1       | &lt;== Moment Effect
+| S_A^3        S_C^3          S_C^3       | &lt;== Deflection Effect
+</code></pre></div></div>
+
+<p>Statical Bound:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>| M_A = 0 |
+| M_C = 0 |
+| Δ_C = 0 |
+</code></pre></div></div>
+
+<p>Usually for simple beams these bounds will be zero, but could be set to other variables if, for example, 
+the beam frames into another member thru a moment connection, or there is differential settlement or something.</p>
+
+<p>Now we are ready to combine all of the above into one equation of the form:  <code class="language-plaintext highlighter-rouge">A * v = b</code></p>
+

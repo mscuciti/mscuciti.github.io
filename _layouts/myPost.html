@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>{{ page.title }} - {{ site.title }}</title>
+    <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/comic-mono@0.0.1/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Recursive&display=swap" rel="stylesheet">
+    <style>
+	body {
+		left: 50%;
+		transform: translate(-50%, 0%);
+		position: absolute;
+		max-width: 75%
+	}
+  code {
+  font-family: monospace;
+  white-space: 'pre';
+  color: DarkBlue;
+  background-color: #f1f1f1;
+  padding: 2px;
+  font-size: 105%;
+}
+    </style>
+  </head>
+  <body>
+    {{ content }}
+  </body>
+</html>
